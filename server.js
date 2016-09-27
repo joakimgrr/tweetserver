@@ -4,6 +4,7 @@ import NodeCache from 'node-cache';
 
 const config = require('./config');
 const concated = config.twitter.consumer_key + ':' + config.twitter.consumer_secret;
+const twitterCache = new NodeCache();
 
 const twitterApiUrl = 'https://api.twitter.com';
 const url = twitterApiUrl + '/oauth2/token';
@@ -44,14 +45,31 @@ let getUserWall = (req, res, next) => {
         }
     }, (err, response, body) => {
         try {
-            res.json(JSON.parse(body));
+            let data = JSON.parse(body);
+            twitterCache.set(config.screen_name, data, 600);
+            console.log('fetching tweets and setting cache');
+            res.json(data);
         } catch(e) { }
 
         res.end();
     })
 }
 
-app.get('/', getBearerToken, getUserWall);
+let respondFromCache = (req, res, next) => {
+    twitterCache.get(config.screen_name, (err, value) => {
+        if (!err) {
+            if (value !== undefined) {
+                console.log('responding from cache');
+                res.json(value);
+                res.end();
+            } else {
+               next();
+           }
+        }
+    })
+}
+
+app.get('/', respondFromCache, getBearerToken, getUserWall);
 app.listen(port);
 
 console.log(`listening to port *:${port}`);
