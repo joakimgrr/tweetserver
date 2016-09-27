@@ -1,12 +1,13 @@
-var request = require('request');
-var express = require('express');
+import request from 'request';
+import express from 'express';
+import NodeCache from 'node-cache';
 
 const config = require('./config');
 const concated = config.twitter.consumer_key + ':' + config.twitter.consumer_secret;
 
 const twitterApiUrl = 'https://api.twitter.com';
 const url = twitterApiUrl + '/oauth2/token';
-const url2 = twitterApiUrl + '/1.1/statuses/user_timeline.json?count=10&screen_name=sysartoy'
+const url2 = twitterApiUrl + '/1.1/statuses/user_timeline.json?count=10&screen_name=' + config.screen_name
 const credentials = new Buffer(concated).toString('base64');
 
 let app = express();
