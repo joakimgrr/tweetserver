@@ -6,7 +6,7 @@ Create a "config.js" file to project root
 
 ```javascript
 module.exports = {
-    'screen_name' : 'SysartOy',
+    'screen_name' : '',
     'twitter' : {
         consumer_key: '',
         consumer_secret: '',
