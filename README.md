@@ -18,7 +18,12 @@ module.exports = {
     'twitter' : {
         consumer_key: '',
         consumer_secret: '',
-    }
+    },
+    url_parameters: [
+        'count=10',
+        'include_rts=true',
+        'exclude_replies=true'
+    ]
 }
 ```
 
