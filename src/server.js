@@ -1,7 +1,7 @@
 import express from 'express';
 import chalk from 'chalk';
 
-const config = require('./config');
+const config = require('../config');
 import { getBearerToken, getUserWall, respondFromCache, addCorsHeaders } from './middleware'
 import logger from './logger';
 
