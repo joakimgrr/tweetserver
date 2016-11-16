@@ -5,8 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "babel-node server.js --presets es2015",
-    "watch": "./node_modules/.bin/nodemon server.js --exec babel-node --presets es2015"
+    "start": "node ./build/server.js",
+    "watch": "./node_modules/.bin/nodemon server.js --exec babel-node --presets es2015",
+    "build-server": "babel ./src --out-dir ./build",
+    "clean": "rm -rf ./build && mkdir ./build",
+    "build": "npm run clean && npm run build-server"
   },
   "author": "",
   "license": "ISC",

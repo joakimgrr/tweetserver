@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import winston from 'winston';
 import fs from 'fs';
 
-const logdir = 'log';
+const logdir = '../log';
 
 if (!fs.existsSync(logdir)) {
     fs.mkdirSync(logdir);
