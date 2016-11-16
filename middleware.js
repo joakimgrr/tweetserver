@@ -1,5 +1,8 @@
 import NodeCache from 'node-cache';
 import request from 'request';
+import chalk from 'chalk';
+
+import utils from './utils';
 
 const twitterCache = new NodeCache();
 
@@ -38,7 +41,7 @@ module.exports = {
             try {
                 let data = JSON.parse(body);
                 twitterCache.set(req.config.screen_name, data, 600);
-                console.log('fetching tweets and setting cache');
+                utils.notify('Fetching tweets and setting cache');
                 res.json(data);
             } catch(e) { }
 
@@ -50,7 +53,7 @@ module.exports = {
         twitterCache.get(req.config.screen_name, (err, value) => {
             if (!err) {
                 if (value !== undefined) {
-                    console.log('responding from cache');
+                    utils.notify('Responding from cache');
                     res.json(value);
                     res.end();
                 } else {
@@ -66,9 +69,10 @@ module.exports = {
 
         // If whitelist is present but our ip is not whitelisted do nothing.
         const whitelist = req.config.cors.ip_whitelist;
-        if (whitelist && !whitelist.includes(req.connection.remoteAddress)) return next();
+        const remoteAddr = req.connection.remoteAddress;
+        if (whitelist && !whitelist.includes(remoteAddr)) return next();
 
-        console.log('setting CORS headers');
+        utils.notify(`Setting CORS headers for: ${chalk.green(remoteAddr)}`);
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Methods', 'GET');
         res.header('Access-Control-Allow-Headers', 'Content-Type');
