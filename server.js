@@ -2,6 +2,7 @@ import express from 'express';
 
 const config = require('./config');
 import { getBearerToken, getUserWall, respondFromCache, addCorsHeaders } from './middleware'
+import { notify } from './utils';
 
 const twitterApiUrl = 'https://api.twitter.com';
 const tokenUrl = twitterApiUrl + '/oauth2/token';
@@ -30,5 +31,4 @@ let getConfig = (req, res, next) => {
 
 app.get('/', getConfig, addCorsHeaders, respondFromCache, getBearerToken, getUserWall);
 app.listen(port);
-
-console.log(`listening to port *:${port}`);
+notify(`Server started and listening to port *:${port}`);
