@@ -1,8 +1,9 @@
 import express from 'express';
+import chalk from 'chalk';
 
 const config = require('./config');
 import { getBearerToken, getUserWall, respondFromCache, addCorsHeaders } from './middleware'
-import { notify } from './utils';
+import logger from './logger';
 
 const twitterApiUrl = 'https://api.twitter.com';
 const tokenUrl = twitterApiUrl + '/oauth2/token';
@@ -31,4 +32,6 @@ let getConfig = (req, res, next) => {
 
 app.get('/', getConfig, addCorsHeaders, respondFromCache, getBearerToken, getUserWall);
 app.listen(port);
-notify(`Server started and listening to port *:${port}`);
+
+console.log(`${chalk.cyan('Tweetserver started and listening to port')} ${chalk.green('*:' + port)}`)
+logger.info(`Server started`);

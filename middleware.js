@@ -2,7 +2,7 @@ import NodeCache from 'node-cache';
 import request from 'request';
 import chalk from 'chalk';
 
-import utils from './utils';
+import logger from './logger';
 
 const twitterCache = new NodeCache();
 
@@ -24,6 +24,7 @@ module.exports = {
                     req.bearer_token = body.access_token;
                     next();
                 } catch(e) {
+                    logger.error('Error when parsing JSON when fetching bearer token', e);
                     res.end();
                 }
             }
@@ -41,9 +42,11 @@ module.exports = {
             try {
                 let data = JSON.parse(body);
                 twitterCache.set(req.config.screen_name, data, 600);
-                utils.notify('Fetching tweets and setting cache');
+                logger.info('Fetching tweets and setting cache');
                 res.json(data);
-            } catch(e) { }
+            } catch(e) {
+                logger.error('Error when parsing user wall JSON', e);
+            }
 
             res.end();
         })
@@ -53,7 +56,7 @@ module.exports = {
         twitterCache.get(req.config.screen_name, (err, value) => {
             if (!err) {
                 if (value !== undefined) {
-                    utils.notify('Responding from cache');
+                    logger.info('Responding from cache');
                     res.json(value);
                     res.end();
                 } else {
@@ -72,7 +75,7 @@ module.exports = {
         const remoteAddr = req.connection.remoteAddress;
         if (whitelist && !whitelist.includes(remoteAddr)) return next();
 
-        utils.notify(`Setting CORS headers for: ${chalk.green(remoteAddr)}`);
+        logger.info(`Setting CORS headers for: ${chalk.green(remoteAddr)}`);
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Methods', 'GET');
         res.header('Access-Control-Allow-Headers', 'Content-Type');
