@@ -9,6 +9,11 @@ Caches and serves users timeline for an easy frontend access
 4. Run "npm start"
 5. Access timeline from http://localhost:8080
 
+## Configure CORS
+Enable CORS in config (shown in example config file).
+
+If you want to limit IP-addresses that get CORS headers you can add a array of IP's that get them.
+
 ## Example config file
 Create a "config.js" file to project root
 
@@ -23,11 +28,16 @@ module.exports = {
         'count=10',
         'include_rts=true',
         'exclude_replies=true'
-    ]
+    ],
+    cors: {
+        enabled: true,
+        ip_whitelist: [
+            '::1',
+            '123.456.789.12'
+        ]
+    }
 }
 ```
 
-## Future improvements 
+## Future improvements
 - Support for multiple user walls
-- Configurable port and amount of tweets fetched
-- Make code better overall (atm a one night hack)
