@@ -17,6 +17,7 @@
     "express": "^4.14.0",
     "node-cache": "^4.1.0",
     "nodemon": "^1.10.2",
-    "request": "^2.75.0"
+    "request": "^2.75.0",
+    "winston": "^2.3.0"
   }
 }
