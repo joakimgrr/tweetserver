@@ -58,6 +58,22 @@ module.exports = {
                }
             }
         })
+    },
+
+    addCorsHeaders(req, res, next) {
+        // If CORS is not configured or disabled do nothing
+        if(!req.config.cors || !req.config.cors.enabled) return next();
+
+        // If whitelist is present but our ip is not whitelisted do nothing.
+        const whitelist = req.config.cors.ip_whitelist;
+        if (whitelist && !whitelist.includes(req.connection.remoteAddress)) return next();
+
+        console.log('setting CORS headers');
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'GET');
+        res.header('Access-Control-Allow-Headers', 'Content-Type');
+
+        next();
     }
 
 }
