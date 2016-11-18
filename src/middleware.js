@@ -72,7 +72,7 @@ module.exports = {
 
         // If whitelist is present but our ip is not whitelisted do nothing.
         const whitelist = req.config.cors.ip_whitelist;
-        const remoteAddr = req.connection.remoteAddress;
+        const remoteAddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         if (whitelist && !whitelist.includes(remoteAddr)) return next();
 
         logger.info(`Setting CORS headers for: ${chalk.green(remoteAddr)}`);
